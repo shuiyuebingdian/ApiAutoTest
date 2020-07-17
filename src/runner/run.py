@@ -23,9 +23,8 @@ def run_case(all_case, result_path=setting.TEST_REPORT):
     now = time.strftime("%Y-%m-%d %H_%M_%S")
     filename = result_path + '/' + now + 'result.html'
     fp = open(filename, 'wb')
-    runner = HTMLTestRunner(stream=fp, title='发布会系统接口自动化测试报告',
-                            description='环境：windows 7 浏览器：chrome',
-                            tester='Jason')
+    runner = HTMLTestRunner(stream=fp, title='数据资产系统接口自动化测试报告',
+                            description='环境：windows 7 浏览器：chrome')
     runner.run(all_case)
     fp.close()
     # report = new_report(setting.TEST_REPORT)  # 调用模块生成最新的报告

@@ -23,6 +23,11 @@ class TestApi(unittest.TestCase):
 
     def setUp(self):
         self.session = requests.session()
+        # 登录，将cookie加入headers
+        login_api = {"URL": "/powerType/list?principal=admin", "METHOD": "get"}
+        login_res = self.session.get(host + "/powerType/list?principal=admin")
+        res_cookie = login_res.headers["Set-Cookie"]
+        self.cookie = res_cookie[:res_cookie.index(";")]
 
     def tearDown(self):
         pass
@@ -30,21 +35,21 @@ class TestApi(unittest.TestCase):
     @ddt.data(*test_api_data)
     def test_api(self, data):
         # 获取ID字段数值，截取结尾数字并去掉开头0
-        row_num = int(data[CASE_ID].split("_")[2])
+        row_num = int(data[CASE_ID].split("_")[1])
         print("******* 正在执行用例 ->{0} *********".format(data[CASE_ID]))
         print("请求方式: {0}，请求URL: {1}".format(data[API_METHOD], data[API_URL]))
         print("请求参数: {0}".format(data[API_PARAMS]))
         print("post请求body类型为：{0} ,body内容为：{1}".format(data[API_TYPE], data[API_BODY]))
 
         # 发送请求
-        res = send_request(self.session, data)
+        res = send_request(self.session, host, self.cookie, data)
         self.result = res.json()
         print("页面返回信息：%s" % res.content.decode(ENCODING))
         # 获取excel表格数据的状态码和消息
         code = int(data[API_CODE])
         msg = data[API_MSG]
 
-        if code == self.result["status"] and msg == self.result["message"]:
+        if code == self.result["status"]:
             case_result = PASS
         else:
             case_result = FAIL
@@ -52,7 +57,6 @@ class TestApi(unittest.TestCase):
         WriteExcel(setting.TARGET_FILE).write_data(row_num + 1, case_result)
 
         self.assertEqual(self.result['status'], code, "返回实际结果是->:%s" % self.result['status'])
-        self.assertEqual(self.result['message'], msg, "返回实际结果是->:%s" % self.result['message'])
 
 
 if __name__ == "__main__":
