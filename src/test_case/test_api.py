@@ -1,5 +1,6 @@
 # _*_ coding:utf-8 _*_
 import unittest
+from configparser import ConfigParser
 
 import ddt as ddt
 import requests
@@ -8,9 +9,13 @@ from src.common.constant import *
 from src.config import setting
 from src.excel.read_excel import ReadExcel
 from src.excel.write_excel import WriteExcel
-from src.request.send_request import send_request
+from src.request.request import send_request, extract_cookies
 
 test_api_data = ReadExcel(setting.SOURCE_FILE).read_data()
+# --------- 读取conf.ini配置文件 ---------------
+cf = ConfigParser()
+cf.read(setting.TEST_CONFIG, encoding=ENCODING)
+host = cf.get("api", "host")
 
 
 @ddt.ddt
@@ -50,5 +55,5 @@ class TestApi(unittest.TestCase):
         self.assertEqual(self.result['message'], msg, "返回实际结果是->:%s" % self.result['message'])
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     unittest.main()

@@ -2,18 +2,12 @@
 import os
 import shutil
 
-import cparser
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Alignment
 from openpyxl.styles.colors import RED, GREEN, DARKYELLOW
 
 from src.common.constant import *
 from src.config import setting
-
-# --------- 读取conf.ini配置文件 ---------------
-cf = cparser.ConfigParser()
-cf.read(setting.TEST_CONFIG, encoding=ENCODING)
-name = cf.get("tester", "name")
 
 
 class WriteExcel(object):
