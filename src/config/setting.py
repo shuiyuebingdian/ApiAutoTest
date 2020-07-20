@@ -3,6 +3,10 @@ import os
 import sys
 
 # 根据当前文件的位置获取项目的绝对路径，因此本文件不能移动
+from configparser import ConfigParser
+
+from src.common.constant import ENCODING
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 # 把项目路径添加到系统变量中
 sys.path.append(BASE_DIR)
@@ -17,3 +21,6 @@ TARGET_FILE = os.path.join(BASE_DIR, "report", "excelReport", "APITestCase.xlsx"
 TEST_REPORT = os.path.join(BASE_DIR, "report")
 # 测试用例程序文件
 TEST_CASE = os.path.join(BASE_DIR, "src", "test_case")
+
+CONFIG = ConfigParser()
+CONFIG.read(TEST_CONFIG, encoding=ENCODING)
