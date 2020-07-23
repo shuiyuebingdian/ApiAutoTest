@@ -1,13 +1,16 @@
 from pymysql.err import OperationalError
 from pymysql import connect, cursors
 
-from src.common.constant import ENCODING
 from src.config.setting import CONFIG
 
 
 class DB:
     """
     MySQL基本操作
+    避免sql注入的方法：
+    sql = "select * from userinfo where username=%s and password=%s;"
+    print(sql)
+    res = cursor.execute(sql,(uname,pword)) #res是得到的行数，如果这个行数不为零，说明用户输入的用户名和密码存在，如果为0说明不存在
     """
     def __init__(self):
         try:
