@@ -22,7 +22,7 @@ class WriteExcel(object):
         # 得到当前可用的worksheet
         self.ws = self.wb.active
 
-    def write_data(self, row_num, value):
+    def write_data(self, row_num, value, error_msg=None):
         """
         将测试结果写入指定行的RESULT_COL_NUM列
         """
@@ -32,6 +32,7 @@ class WriteExcel(object):
         # 要写入的结果所在行列坐标
         result_coord = RESULT_COL + str(row_num)
         self.ws.cell(row_num, RESULT_COL_NUM, value)
+        self.ws.cell(row_num, ERROR_MSG_COL_NUM, error_msg)
         if value == PASS:
             self.ws[result_coord].font = font_green
         else:
