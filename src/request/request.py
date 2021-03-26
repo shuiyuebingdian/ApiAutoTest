@@ -3,31 +3,30 @@ import json
 from src.common.constant import *
 
 
-def send_request(session, host, cookie, api):
+def send_request(session, host, head, api):
     """从api中提取request请求参数，组装request请求并发送请求"""
     try:
 
         method = api[API_METHOD]
         url = host + api[API_URL]
-        if api[API_PARAMS]:
-            params = eval(api[API_PARAMS])
-        else:
-            params = None
 
+        headers = {}
         if api[API_HEADERS]:
-            headers = eval(api[API_HEADERS])
-            if cookie:
-                headers["Cookie"] = cookie
-        else:
-            headers = None
+            header_val = api[API_HEADERS].split(":")
+            if "$" in api[API_HEADERS]:
+                headers[header_val[0]] = header_val[1].replace("$", head)
+            else:
+                headers[header_val[0]] = header_val[1]
 
         data_type = api[API_TYPE]
-        if api[API_BODY]:
-            body = eval(api[API_BODY])
-            if data_type == JSON_TYPE:
-                body = json.dumps(body)
+        if data_type == JSON_TYPE:
+            if api[API_BODY]:
+                body = eval(api[API_BODY])
+            if api[API_PARAMS]:
+                params = eval(api[API_PARAMS])
         else:
-            body = None
+            body = api[API_BODY]
+            params = api[API_PARAMS]
 
         # 发送请求
         return session.request(method=method, url=url, headers=headers, params=params, data=body, verify=False)

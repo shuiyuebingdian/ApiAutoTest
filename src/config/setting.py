@@ -13,14 +13,17 @@ sys.path.append(BASE_DIR)
 
 # 配置文件
 TEST_CONFIG = os.path.join(BASE_DIR, "config", "conf.ini")
+CONFIG = ConfigParser()
+CONFIG.read(TEST_CONFIG, encoding=ENCODING)
+
 # 测试用例模板文件
-SOURCE_FILE = os.path.join(BASE_DIR, "test_case", "testCase.xlsx")
-# excel测试用例结果文件
-TARGET_FILE = os.path.join(BASE_DIR, "report", "excelReport", "APITestCase.xlsx")
+SOURCE_FILE = os.path.join(BASE_DIR, "test_case", CONFIG.get("project", "case_file"))
+
 # 测试用例报告
-TEST_REPORT = os.path.join(BASE_DIR, "report")
+TEST_REPORT = os.path.join(BASE_DIR, "report", CONFIG.get("project", "name"))
+
+# excel测试用例结果文件
+TARGET_FILE = os.path.join(TEST_REPORT, CONFIG.get("project", "case_result"))
 # 测试用例程序文件
 TEST_CASE = os.path.join(BASE_DIR, "src", "test_case")
 
-CONFIG = ConfigParser()
-CONFIG.read(TEST_CONFIG, encoding=ENCODING)
